@@ -7,12 +7,21 @@ import plotly.express as px
 
 # Cargar el archivo CSV
 df = pd.read_csv("netflix_users.csv")
+df.columns = [
+    "ID_Usuario",
+    "Nombre",
+    "Edad",
+    "País",
+    "Tipo_Suscripción",
+    "Horas_Vistas",
+    "Género_Favorito",
+    "Último_Inicio_Sesión"
 
 # Configuración de la página
 st.set_page_config(page_title="Netflix Users Data", page_icon="📊", layout="wide")
 
 # Imagen inicial
-st.image('Netflix.jpg', caption='Netflix Users Data', use_column_width=True)
+st.image('Netflix.jpg', caption='Netflix Users Data', use_container_width=True)
 
 # Título y descripción
 st.title('Análisis de Datos de Usuarios de Netflix')
