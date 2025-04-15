@@ -8,20 +8,20 @@ import seaborn as sns
 df = pd.read_csv("netflix_users.csv")
 
 # Mostrar el contenido del DataFrame
-display(df)
+st.dataframe(df)(df)
 df.info()
 
 # Definir la columna como índice del DataFrame
 print(df.columns)
 df.set_index("Name",inplace=True)
 # Mostrar el contenido del DataFrame con el nuevo índice
-display(df)
+st.dataframe(df)(df)
 
 # Homogeneizar los nombres de las columnas
 df.rename(columns=lambda x: x.strip().lower().replace(" ", "_"), inplace=True)
 
 # Mostrar el contenido del DataFrame con los nuevos nombres de columna
-display(df)
+st.dataframe(df)(df)
 
 # Valores nulos en cada columna
 null_counts = df.isnull().sum()
