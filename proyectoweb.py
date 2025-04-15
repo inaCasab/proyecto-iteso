@@ -25,10 +25,10 @@ df.info()
 # Filtros interactivos en la barra lateral
 st.sidebar.header("Filtros")
 pais_seleccionado = st.sidebar.selectbox('Selecciona un país', df['Country'].unique())
-edad_minima = st.sidebar.slider('Edad mínima', min_value=int(df['age'].min()), max_value=int(df['age'].max()), value=20)
+edad_minima = st.sidebar.slider('Edad mínima', min_value=int(df['Age'].min()), max_value=int(df['Age'].max()), value=20)
 
 # Filtrar los datos según los filtros aplicados
-df_filtrado = df[(df['Country'] == pais_seleccionado) & (df['age'] >= edad_minima)]
+df_filtrado = df[(df['Country'] == pais_seleccionado) & (df['Age'] >= edad_minima)]
 
 # Mostrar los datos filtrados
 st.write(f"Datos filtrados por país: {pais_seleccionado} y edad mayor o igual a {edad_minima}")
@@ -52,16 +52,16 @@ total_nulls = null_counts.sum()
 st.write(f"Total de celdas con valores nulos: {total_nulls}")
 
 # Análisis 1: Edad promedio por país
-edad_promedio_por_pais = df.groupby('Country')['age'].mean().sort_values(ascending=False)
+edad_promedio_por_pais = df.groupby('Country')['Age'].mean().sort_values(ascending=False)
 fig1 = px.bar(edad_promedio_por_pais, x=edad_promedio_por_pais.index, y=edad_promedio_por_pais.values,
               labels={'x': 'País', 'y': 'Edad Promedio'}, title="Edad Promedio de Usuarios por País")
 st.plotly_chart(fig1)
 
 # Análisis 2: Correlación entre edad y horas de visualización
-correlacion = df[['age', 'watch_time_hours']].corr()
+correlacion = df[['Age', 'watch_time_hours']].corr()
 st.write(f"La correlación entre edad y horas de visualización es: {correlacion.iloc[0, 1]}")
 
-fig2 = px.scatter(df, x='age', y='watch_time_hours', color='Country', title="Correlación entre Edad y Horas de Visualización")
+fig2 = px.scatter(df, x='Age', y='watch_time_hours', color='Country', title="Correlación entre Edad y Horas de Visualización")
 st.plotly_chart(fig2)
 
 # Análisis 3: Distribución de usuarios por género
