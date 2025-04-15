@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import streamlit as st
 
 # Carga del archivo CSV en un DataFrame
 df = pd.read_csv("netflix_users.csv")
@@ -12,8 +13,8 @@ st.dataframe(df)
 df.info()
 
 # Definir la columna como índice del DataFrame
-print(df.columns)
-df.set_index("Name",inplace=True)
+st.write(df.columns)
+df.set_index("Name", inplace=True)
 # Mostrar el contenido del DataFrame con el nuevo índice
 st.dataframe(df)
 
@@ -29,24 +30,24 @@ null_counts = df.isnull().sum()
 # Total de valores nulos en todo el DataFrame
 total_nulls = null_counts.sum()
 
-print(f"Total de celdas con valores nulos: {total_nulls}")
+st.write(f"Total de celdas con valores nulos: {total_nulls}")
 
 # Mostrar los nombres de las categorías
-df.columns
+st.write(df.columns)
 
-# Seleccionar la media de edad de usuarios 
+# Seleccionar la media de edad de usuarios
 columna = "age"
 
 # Calcular la media
 media_valor = df[columna].mean()
 
 # Imprimir el resultado
-print(f"La media de la columna '{columna}' es: {media_valor}")
+st.write(f"La media de la columna '{columna}' es: {media_valor}")
 
 # Contar usuarios por país y mostrar los 5 más comunes
 usuarios_por_pais = df['country'].value_counts().head(5)
-print("Top 5 países con más usuarios:")
-print(usuarios_por_pais)
+st.write("Top 5 países con más usuarios:")
+st.write(usuarios_por_pais)
 
 # Contar usuarios por país y seleccionar los 5 con mayor cantidad
 usuarios_mayor_pais = df['country'].value_counts().head(5)
@@ -59,15 +60,13 @@ plt.xlabel('País')
 plt.ylabel('Cantidad de usuarios')
 plt.xticks(rotation=45)
 plt.grid(axis='y', linestyle='--')
-plt.show()
+# Mostrar el gráfico en Streamlit
+st.pyplot(plt)
 
 # Contar usuarios por país y mostrar los 5 con menor cantidad
 usuarios_menor_pais = df['country'].value_counts().tail(5)
-print("Países con menor cantidad de usuarios:")
-print(usuarios_menor_pais)
-
-# Contar usuarios por país y seleccionar los 5 con menor cantidad
-usuarios_menor_pais = df['country'].value_counts().tail(5)
+st.write("Países con menor cantidad de usuarios:")
+st.write(usuarios_menor_pais)
 
 # Crear el histograma
 plt.figure(figsize=(8, 5))
@@ -77,7 +76,8 @@ plt.xlabel('País')
 plt.ylabel('Cantidad de usuarios')
 plt.xticks(rotation=45)
 plt.grid(axis='y', linestyle='--')
-plt.show()
+# Mostrar el gráfico en Streamlit
+st.pyplot(plt)
 
 # Crear rangos de horas de visualización
 bins = [0, 5, 10, 15, 20, 25, 30, 50]  # Definir los intervalos
@@ -93,4 +93,4 @@ tabla_horas = df['watch_time_hours'].value_counts().sort_index()
 tabla_horas_df = pd.DataFrame({'Rango de horas semanales': labels, 'Cantidad de usuarios': tabla_horas.values})
 
 # Mostrar la tabla
-print(tabla_horas_df)
+st.write(tabla_horas_df)
