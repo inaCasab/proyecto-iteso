@@ -12,7 +12,7 @@ df = pd.read_csv("netflix_users.csv")
 st.set_page_config(page_title="Netflix Users Data", page_icon="📊", layout="wide")
 
 # Agregar una imagen al inicio de la app
-st.image('url_o_ruta_de_tu_imagen.jpg', caption='Netflix Users Data', use_column_width=True)
+st.image('Netflix.jpg', caption='Netflix Users Data', use_column_width=True)
 
 # Título y descripción
 st.title('Análisis de Datos de Usuarios de Netflix')
