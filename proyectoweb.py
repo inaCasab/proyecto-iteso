@@ -24,11 +24,11 @@ df.info()
 
 # Filtros interactivos en la barra lateral
 st.sidebar.header("Filtros")
-pais_seleccionado = st.sidebar.selectbox('Selecciona un país', df['country'].unique())
+pais_seleccionado = st.sidebar.selectbox('Selecciona un país', df['Contry'].unique())
 edad_minima = st.sidebar.slider('Edad mínima', min_value=int(df['age'].min()), max_value=int(df['age'].max()), value=20)
 
 # Filtrar los datos según los filtros aplicados
-df_filtrado = df[(df['country'] == pais_seleccionado) & (df['age'] >= edad_minima)]
+df_filtrado = df[(df['Contry'] == pais_seleccionado) & (df['age'] >= edad_minima)]
 
 # Mostrar los datos filtrados
 st.write(f"Datos filtrados por país: {pais_seleccionado} y edad mayor o igual a {edad_minima}")
@@ -52,7 +52,7 @@ total_nulls = null_counts.sum()
 st.write(f"Total de celdas con valores nulos: {total_nulls}")
 
 # Análisis 1: Edad promedio por país
-edad_promedio_por_pais = df.groupby('country')['age'].mean().sort_values(ascending=False)
+edad_promedio_por_pais = df.groupby('Contry')['age'].mean().sort_values(ascending=False)
 fig1 = px.bar(edad_promedio_por_pais, x=edad_promedio_por_pais.index, y=edad_promedio_por_pais.values,
               labels={'x': 'País', 'y': 'Edad Promedio'}, title="Edad Promedio de Usuarios por País")
 st.plotly_chart(fig1)
@@ -61,7 +61,7 @@ st.plotly_chart(fig1)
 correlacion = df[['age', 'watch_time_hours']].corr()
 st.write(f"La correlación entre edad y horas de visualización es: {correlacion.iloc[0, 1]}")
 
-fig2 = px.scatter(df, x='age', y='watch_time_hours', color='country', title="Correlación entre Edad y Horas de Visualización")
+fig2 = px.scatter(df, x='age', y='watch_time_hours', color='Contry', title="Correlación entre Edad y Horas de Visualización")
 st.plotly_chart(fig2)
 
 # Análisis 3: Distribución de usuarios por género
@@ -72,7 +72,7 @@ if 'gender' in df.columns:
     st.plotly_chart(fig3)
 
 # Contar usuarios por país y mostrar los 5 más comunes
-usuarios_por_pais = df['country'].value_counts().head(5)
+usuarios_por_pais = df['Contry'].value_counts().head(5)
 st.write("Top 5 países con más usuarios:")
 st.write(usuarios_por_pais)
 
@@ -82,7 +82,7 @@ fig4 = px.bar(usuarios_por_pais, x=usuarios_por_pais.index, y=usuarios_por_pais.
 st.plotly_chart(fig4)
 
 # Contar usuarios por país y mostrar los 5 con menor cantidad
-usuarios_menor_pais = df['country'].value_counts().tail(5)
+usuarios_menor_pais = df['Contry'].value_counts().tail(5)
 st.write("Países con menor cantidad de usuarios:")
 st.write(usuarios_menor_pais)
 
