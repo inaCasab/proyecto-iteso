@@ -74,22 +74,65 @@ if 'Horas_Vistas' in df.columns:
     st.plotly_chart(fig2)
 
 # Análisis 3: Usuarios por tipo de suscripción
-suscripciones = df['Tipo_Suscripción'].value_counts()
-fig3 = px.pie(suscripciones, names=suscripciones.index, values=suscripciones.values,
-              title="Distribución por Tipo de Suscripción")
-st.plotly_chart(fig3)
+
+st.subheader("Distribución por Tipo de Suscripción")
+
+# Filtros interactivos
+paises_disponibles = df['País'].unique()
+paises_filtro = st.multiselect(
+    "Filtrar por país:",
+    options=paises_disponibles,
+    default=paises_disponibles
+)
+
+edad_min, edad_max = int(df['Edad'].min()), int(df['Edad'].max())
+edad_filtro = st.slider("Filtrar por rango de edad:", min_value=edad_min, max_value=edad_max, value=(edad_min, edad_max))
+
+# Aplicar filtros
+df_filtrado = df[
+    (df['País'].isin(paises_filtro)) &
+    (df['Edad'] >= edad_filtro[0]) &
+    (df['Edad'] <= edad_filtro[1])
+]
+
+# Contar usuarios por tipo de suscripción
+suscripciones = df_filtrado['Tipo_Suscripción'].value_counts()
+
+# Gráfica
+fig_suscripciones = px.pie(
+    names=suscripciones.index,
+    values=suscripciones.values,
+    title="Distribución de Tipos de Suscripción (Filtrada)"
+)
+st.plotly_chart(fig_suscripciones, use_container_width=True)
 
 # Análisis 4: Usuarios por país (Top 5)
-top_paises = df['País'].value_counts().head(5)
-fig4 = px.bar(top_paises, x=top_paises.index, y=top_paises.values,
-              labels={'x': 'País', 'y': 'Usuarios'}, title="Top 5 Países con más Usuarios")
-st.plotly_chart(fig4)
+st.subheader("Cantidad de Usuarios por País")
 
-# Análisis 5: Países con menor cantidad de usuarios (Bottom 5)
-bottom_paises = df['País'].value_counts().tail(5)
-fig5 = px.bar(bottom_paises, x=bottom_paises.index, y=bottom_paises.values,
-              labels={'x': 'País', 'y': 'Usuarios'}, title="Países con Menos Usuarios")
-st.plotly_chart(fig5)
+# Filtro para seleccionar cuántos países mostrar
+num_paises = st.slider(
+    "Selecciona cuántos países quieres mostrar",
+    min_value=1,
+    max_value=len(df['País'].value_counts()),
+    value=10
+)
+
+# Contar usuarios por país, ordenar y limitar a los seleccionados
+usuarios_por_pais = df['País'].value_counts().sort_values(ascending=False).head(num_paises)
+
+# Gráfico interactivo con Plotly
+fig4 = px.bar(
+    usuarios_por_pais,
+    x=usuarios_por_pais.index,
+    y=usuarios_por_pais.values,
+    labels={'x': 'País', 'y': 'Usuarios'},
+    title=f"Top {num_paises} Países con Más Usuarios"
+)
+
+fig4.update_layout(xaxis_tickangle=-45)
+
+st.plotly_chart(fig4, use_container_width=True)
+
 
 # Análisis 6: Rango de horas vistas
 bins = [0, 5, 10, 15, 20, 25, 30, 50]
