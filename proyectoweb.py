@@ -29,12 +29,13 @@ st.title('Análisis de Datos de Usuarios de Netflix')
 st.subheader('Explora los insights de los usuarios de Netflix')
 
 # Mostrar los datos
-st.dataframe(df)
+
 if st.checkbox("Mostrar todos los datos"):
     st.subheader("Vista completa de los datos")
     st.dataframe(df)
 else:
     st.info("Haz clic en la casilla para mostrar los datos completos.")
+
     
 # Filtros interactivos en la barra lateral
 st.sidebar.header("Filtros")
