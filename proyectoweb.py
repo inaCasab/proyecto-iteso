@@ -168,6 +168,35 @@ fig_dispersion = px.scatter(
 
 st.plotly_chart(fig_dispersion, use_container_width=True)
 
+#Género favorito
 
+st.subheader("🎬 Análisis del Género Favorito de los Usuarios")
 
+# Obtener los valores únicos de país
+paises_unicos = df['País'].unique()
+
+# Filtros interactivos
+paises_seleccionados = st.multiselect("Selecciona país(es)", options=paises_unicos, default=paises_unicos)
+rango_edad = st.slider("Selecciona el rango de edad", min_value=int(df['Edad'].min()), max_value=int(df['Edad'].max()), value=(18, 60))
+
+# Filtrar el DataFrame según filtros
+df_genero = df[
+    (df['País'].isin(paises_seleccionados)) &
+    (df['Edad'] >= rango_edad[0]) &
+    (df['Edad'] <= rango_edad[1])
+]
+
+# Contar géneros favoritos
+conteo_generos = df_genero['Género_Favorito'].value_counts().sort_values(ascending=True)
+
+# Gráfico de barras horizontales
+fig_genero = px.bar(
+    x=conteo_generos.values,
+    y=conteo_generos.index,
+    orientation='h',
+    labels={'x': 'Cantidad de Usuarios', 'y': 'Género Favorito'},
+    title="Preferencias de Géneros por Edad y País"
+)
+
+st.plotly_chart(fig_genero, use_container_width=True)
 
