@@ -36,29 +36,34 @@ if st.checkbox("Mostrar todos los datos"):
 else:
     st.info("Haz clic en la casilla para mostrar los datos completos.")
 
-    
-# Filtros interactivos en la barra lateral
-st.sidebar.header("Filtros")
-pais_seleccionado = st.sidebar.selectbox('Selecciona un país', df['País'].unique())
-edad_minima = st.sidebar.slider('Edad mínima', min_value=int(df['Edad'].min()), max_value=int(df['Edad'].max()), value=20)
 
-# Filtrar los datos
-df_filtrado = df[(df['País'] == pais_seleccionado) & (df['Edad'] >= edad_minima)]
 
-# Mostrar resultados filtrados
-st.write(f"Datos filtrados por país: {pais_seleccionado} y edad mayor o igual a {edad_minima}")
-st.dataframe(df_filtrado)
+# Análisis 1: Edad promedio por país con filtro múltiple
+st.subheader("Edad Promedio por País")
 
-# Revisar valores nulos
-null_counts = df.isnull().sum()
-total_nulls = null_counts.sum()
-st.write(f"Total de celdas con valores nulos: {total_nulls}")
+# Selector de países (multiselección)
+paises_disponibles = df['País'].unique()
+paises_seleccionados = st.multiselect(
+    "Selecciona los países que deseas analizar:",
+    options=paises_disponibles,
+    default=paises_disponibles  # Por defecto selecciona todos
+)
 
-# Análisis 1: Edad promedio por país
-edad_promedio_por_pais = df.groupby('País')['Edad'].mean().sort_values(ascending=False)
-fig1 = px.bar(edad_promedio_por_pais, x=edad_promedio_por_pais.index, y=edad_promedio_por_pais.values,
-              labels={'x': 'País', 'y': 'Edad Promedio'}, title="Edad Promedio de Usuarios por País")
-st.plotly_chart(fig1)
+# Filtrar el DataFrame según los países seleccionados
+df_filtrado_paises = df[df['País'].isin(paises_seleccionados)]
+
+# Calcular edad promedio por país
+edad_promedio_por_pais = df_filtrado_paises.groupby('País')['Edad'].mean().sort_values(ascending=False)
+
+# Gráfica
+fig1 = px.bar(
+    edad_promedio_por_pais,
+    x=edad_promedio_por_pais.index,
+    y=edad_promedio_por_pais.values,
+    labels={'x': 'País', 'y': 'Edad Promedio'},
+    title="Edad Promedio de Usuarios por País"
+)
+st.plotly_chart(fig1, use_container_width=True)
 
 # Análisis 2: Correlación entre edad y horas vistas
 if 'Horas_Vistas' in df.columns:
