@@ -139,27 +139,19 @@ st.plotly_chart(fig4, use_container_width=True)
 
 st.subheader("Top Edades con Más Usuarios")
 
-# Filtro por país (multiselect)
-paises_edades = st.multiselect("Selecciona país(es)", options=df['País'].unique(), default=df['País'].unique())
+top_n = st.slider("Selecciona cuántas edades mostrar", 5, 20, 10)
 
-# Filtro para seleccionar cuántas edades mostrar
-top_n_edades = st.slider("¿Cuántas edades mostrar?", min_value=3, max_value=20, value=10)
+edades_mas_comunes = df["Edad"].value_counts().sort_values(ascending=False).head(top_n)
 
-# Filtrar el DataFrame por los países seleccionados
-df_edades = df[df['País'].isin(paises_edades)]
-
-# Contar la cantidad de usuarios por edad
-conteo_edades = df_edades['Edad'].value_counts().sort_values(ascending=False).head(top_n_edades)
-
-# Gráfico de barras
-fig_edades = px.bar(
-    x=conteo_edades.index,
-    y=conteo_edades.values,
-    labels={'x': 'Edad', 'y': 'Cantidad de Usuarios'},
-    title=f"Top {top_n_edades} Edades con Más Usuarios (por país)",
+fig_top_edades = px.bar(
+    edades_mas_comunes,
+    x=edades_mas_comunes.index,
+    y=edades_mas_comunes.values,
+    labels={"x": "Edad", "y": "Cantidad de Usuarios"},
+    title=f"Top {top_n} Edades con Más Usuarios"
 )
 
-st.plotly_chart(fig_edades, use_container_width=True)
+st.plotly_chart(fig_top_edades, use_container_width=True)
 
 #Relación entre edad y horas vistas
 
