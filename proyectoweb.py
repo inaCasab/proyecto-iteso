@@ -134,13 +134,39 @@ fig4.update_layout(xaxis_tickangle=-45)
 st.plotly_chart(fig4, use_container_width=True)
 
 
-# Análisis 6: Rango de horas vistas
-bins = [0, 5, 10, 15, 20, 25, 30, 50]
-labels = ['0-5', '6-10', '11-15', '16-20', '21-25', '26-30', '30+']
-df['Rango_Horas'] = pd.cut(df['Horas_Vistas'], bins=bins, labels=labels, right=False)
-tabla_horas = df['Rango_Horas'].value_counts().sort_in
 
+#Edades con más usuarios (Top N edades)
 
+st.subheader("Top Edades con Más Usuarios")
+
+top_n = st.slider("Selecciona cuántas edades mostrar", 5, 20, 10)
+
+edades_mas_comunes = df["Edad"].value_counts().sort_values(ascending=False).head(top_n)
+
+fig_top_edades = px.bar(
+    edades_mas_comunes,
+    x=edades_mas_comunes.index,
+    y=edades_mas_comunes.values,
+    labels={"x": "Edad", "y": "Cantidad de Usuarios"},
+    title=f"Top {top_n} Edades con Más Usuarios"
+)
+
+st.plotly_chart(fig_top_edades, use_container_width=True)
+
+#Relación entre edad y horas vistas
+
+st.subheader("Relación entre Edad y Horas Vistas")
+
+fig_dispersion = px.scatter(
+    df,
+    x="Edad",
+    y="Horas_Vistas",
+    trendline="ols",
+    color="País",
+    title="Edad vs. Horas de Visualización"
+)
+
+st.plotly_chart(fig_dispersion, use_container_width=True)
 
 
 
