@@ -80,37 +80,48 @@ fig1 = px.bar(
 )
 st.plotly_chart(fig1, use_container_width=True)
 
+
+
+
+
 # Análisis 2: 
 
-paises_unicos = df['País'].unique()
-paises_seleccionados = st.multiselect("Selecciona país(es)", options=paises_unicos, default=paises_unicos)
-rango_edad = st.slider(
-    "Selecciona el rango de edad",
+# Filtros interactivos
+paises_corr = df['País'].unique()
+paises_corr_seleccionados = st.multiselect("Selecciona país(es) para correlación", options=paises_corr, default=paises_corr)
+rango_edad_corr = st.slider(
+    "Selecciona el rango de edad para correlación",
     min_value=int(df['Edad'].min()),
     max_value=int(df['Edad'].max()),
     value=(18, 60)
 )
 
-# Aplicar filtros al DataFrame
-df_filtrado = df[
-    (df['País'].isin(paises_seleccionados)) &
-    (df['Edad'] >= rango_edad[0]) & (df['Edad'] <= rango_edad[1])
+# Aplicar filtros
+df_filtrado_corr = df[
+    (df['País'].isin(paises_corr_seleccionados)) &
+    (df['Edad'] >= rango_edad_corr[0]) & (df['Edad'] <= rango_edad_corr[1])
 ]
 
 # Matriz de correlación
 st.subheader("Matriz de Correlación entre Variables Numéricas")
 
-# Seleccionar solo las columnas numéricas
-df_numerico = df_filtrado[['Edad', 'Horas_Vistas']].dropna()
-
-# Calcular la matriz de correlación
+df_numerico = df_filtrado_corr[['Edad', 'Horas_Vistas']].dropna()
 matriz_corr = df_numerico.corr()
 
-# Mostrar como gráfico tipo heatmap
-fig, ax = plt.subplots(figsize=(8, 6))
-sns.heatmap(matriz_corr, annot=True, cmap='coolwarm', vmin=-1, vmax=1, linewidths=0.5, ax=ax)
-ax.set_title('Matriz de Correlación')
-st.pyplot(fig)
+fig = px.imshow(
+    matriz_corr,
+    text_auto=True,
+    color_continuous_scale='RdBu_r',
+    zmin=-1,
+    zmax=1,
+    title="Matriz de Correlación Interactiva"
+)
+
+st.plotly_chart(fig, use_container_width=True)
+
+
+
+
 
 
 # Análisis 3: Usuarios por tipo de suscripción
@@ -215,29 +226,30 @@ fig_top_edades = px.bar(
 st.plotly_chart(fig_top_edades, use_container_width=True)
 
 
-
+#Análisis
 #Género favorito
 
 st.subheader("Análisis del Género Favorito de los Usuarios")
 
-# Obtener los valores únicos de país
-paises_unicos = df['País'].unique()
+# Filtros propios
+paises_genero = df['País'].unique()
+paises_genero_seleccionados = st.multiselect("Selecciona país(es) para género favorito", options=paises_genero, default=paises_genero)
+rango_edad_genero = st.slider(
+    "Selecciona el rango de edad para género favorito",
+    min_value=int(df['Edad'].min()),
+    max_value=int(df['Edad'].max()),
+    value=(18, 60)
+)
 
-# Filtros interactivos
-paises_seleccionados = st.multiselect("Selecciona país(es)", options=paises_unicos, default=paises_unicos)
-rango_edad = st.slider("Selecciona el rango de edad", min_value=int(df['Edad'].min()), max_value=int(df['Edad'].max()), value=(18, 60))
-
-# Filtrar el DataFrame según filtros
+# Filtrar el DataFrame
 df_genero = df[
-    (df['País'].isin(paises_seleccionados)) &
-    (df['Edad'] >= rango_edad[0]) &
-    (df['Edad'] <= rango_edad[1])
+    (df['País'].isin(paises_genero_seleccionados)) &
+    (df['Edad'] >= rango_edad_genero[0]) &
+    (df['Edad'] <= rango_edad_genero[1])
 ]
 
-# Contar géneros favoritos
 conteo_generos = df_genero['Género_Favorito'].value_counts().sort_values(ascending=True)
 
-# Gráfico de barras horizontales
 fig_genero = px.bar(
     x=conteo_generos.values,
     y=conteo_generos.index,
