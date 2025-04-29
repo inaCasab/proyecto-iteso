@@ -282,7 +282,7 @@ st.plotly_chart(fig_genero, use_container_width=True)
 
 # Filtros interactivos
 paises_seleccionados = st.multiselect("Selecciona país(es)", options=paises_unicos, default=paises_unicos)
-rango_edad = st.slider("Selecciona el rango de edad", min_value=int(df['Edad'].min()), max_value=int(df['Edad'].max()), value=(18, 60)).  
+rango_edad = st.slider("Selecciona el rango de edad", min_value=int(df['Edad'].min()), max_value=int(df['Edad'].max()), value=(18, 60))
 
 #Relación entre edad y horas vistas
 
