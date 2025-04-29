@@ -30,14 +30,18 @@ st.subheader('Explora los insights de los usuarios de Netflix')
 
 # Mostrar los datos
 
+# Inicializar el estado si no existe
 if 'mostrar_datos' not in st.session_state:
     st.session_state.mostrar_datos = False
 
-# Botón para mostrar los datos
-if st.button("Mostrar todos los datos"):
-    st.session_state.mostrar_datos = True
+# Cambiar el texto del botón según el estado
+boton_texto = "Ocultar datos" if st.session_state.mostrar_datos else "Mostrar todos los datos"
 
-# Mostrar los datos si el estado es True
+# Botón para alternar el estado
+if st.button(boton_texto):
+    st.session_state.mostrar_datos = not st.session_state.mostrar_datos
+
+# Mostrar u ocultar los datos
 if st.session_state.mostrar_datos:
     st.subheader("Vista completa de los datos")
     st.dataframe(df)
