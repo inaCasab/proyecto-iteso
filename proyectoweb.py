@@ -28,6 +28,9 @@ st.image('Netflix.jpg', caption='Netflix Users Data', use_container_width=True)
 st.title('Análisis de Datos de Usuarios de Netflix')
 st.subheader('Explora los insights de los usuarios de Netflix')
 
+#Nombres
+st.markdown("### Creado por Ina Gabriela Casab Covarrubias y Leonardo Gamboa Cruz")
+
 # Mostrar los datos
 
 # Inicializar el estado si no existe
