@@ -84,53 +84,50 @@ st.plotly_chart(fig1, use_container_width=True)
 
 
 
-# Análisis 2: Correlación entre edad y horas
+# Análisis 2: 
 
-st.subheader("Matriz de Correlación entre Variables Numéricas")
+st.subheader("Relación entre Edad y Horas Vistas")
 
-# Filtros en el menú lateral (sidebar)
-with st.sidebar:
-    st.markdown("## Filtros para Matriz de Correlación")
-    
-    paises_corr = df['País'].unique()
-    paises_corr_seleccionados = st.multiselect(
-        "Selecciona país(es) para correlación:",
-        options=paises_corr,
-        default=paises_corr
-    )
-    
-    rango_edad_corr = st.slider(
-        "Selecciona el rango de edad para correlación:",
-        min_value=int(df['Edad'].min()),
-        max_value=int(df['Edad'].max()),
-        value=(18, 60)
-    )
+# Filtros interactivos (en el centro, no en el sidebar)
+paises_unicos = df['País'].unique()
 
-# Aplicar filtros al DataFrame
-df_filtrado_corr = df[
-    (df['País'].isin(paises_corr_seleccionados)) &
-    (df['Edad'] >= rango_edad_corr[0]) &
-    (df['Edad'] <= rango_edad_corr[1])
+paises_seleccionados = st.multiselect(
+    "Selecciona país(es)", 
+    options=paises_unicos, 
+    default=paises_unicos
+)
+
+rango_edad = st.slider(
+    "Selecciona el rango de edad",
+    min_value=int(df['Edad'].min()),
+    max_value=int(df['Edad'].max()),
+    value=(18, 60)
+)
+
+# Aplicar los filtros
+df_filtrado = df[
+    (df['País'].isin(paises_seleccionados)) &
+    (df['Edad'] >= rango_edad[0]) & 
+    (df['Edad'] <= rango_edad[1])
 ]
 
-# Asegurarnos de que solo columnas numéricas
-df_numerico = df_filtrado_corr[['Edad', 'Horas_Vistas']].dropna()
+# Seleccionar columnas numéricas
+df_numerico = df_filtrado[['Edad', 'Horas_Vistas']].dropna()
 
 # Calcular la matriz de correlación
 matriz_corr = df_numerico.corr()
 
-# Graficar usando plotly (interactivo)
+# Graficar la matriz de correlación de manera interactiva
 fig_corr = px.imshow(
     matriz_corr,
     text_auto=True,
     color_continuous_scale='RdBu_r',
     zmin=-1,
     zmax=1,
-    title="Matriz de Correlación Interactiva (Edad vs Horas Vistas)"
+    title="Matriz de Correlación entre Edad y Horas Vistas"
 )
 
 st.plotly_chart(fig_corr, use_container_width=True)
-
 
 
 
@@ -241,34 +238,5 @@ st.plotly_chart(fig_top_edades, use_container_width=True)
 #Análisis
 #Género favorito
 
-st.subheader("Análisis del Género Favorito de los Usuarios")
 
-# Filtros propios
-paises_genero = df['País'].unique()
-paises_genero_seleccionados = st.multiselect("Selecciona país(es) para género favorito", options=paises_genero, default=paises_genero)
-rango_edad_genero = st.slider(
-    "Selecciona el rango de edad para género favorito",
-    min_value=int(df['Edad'].min()),
-    max_value=int(df['Edad'].max()),
-    value=(18, 60)
-)
-
-# Filtrar el DataFrame
-df_genero = df[
-    (df['País'].isin(paises_genero_seleccionados)) &
-    (df['Edad'] >= rango_edad_genero[0]) &
-    (df['Edad'] <= rango_edad_genero[1])
-]
-
-conteo_generos = df_genero['Género_Favorito'].value_counts().sort_values(ascending=True)
-
-fig_genero = px.bar(
-    x=conteo_generos.values,
-    y=conteo_generos.index,
-    orientation='h',
-    labels={'x': 'Cantidad de Usuarios', 'y': 'Género Favorito'},
-    title="Preferencias de Géneros por Edad y País"
-)
-
-st.plotly_chart(fig_genero, use_container_width=True)
 
