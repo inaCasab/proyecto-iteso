@@ -84,40 +84,52 @@ st.plotly_chart(fig1, use_container_width=True)
 
 
 
-# Análisis 2: 
+# Análisis 2: Correlación entre edad y horas
 
-# Filtros interactivos
-paises_corr = df['País'].unique()
-paises_corr_seleccionados = st.multiselect("Selecciona país(es) para correlación", options=paises_corr, default=paises_corr)
-rango_edad_corr = st.slider(
-    "Selecciona el rango de edad para correlación",
-    min_value=int(df['Edad'].min()),
-    max_value=int(df['Edad'].max()),
-    value=(18, 60)
-)
-
-# Aplicar filtros
-df_filtrado_corr = df[
-    (df['País'].isin(paises_corr_seleccionados)) &
-    (df['Edad'] >= rango_edad_corr[0]) & (df['Edad'] <= rango_edad_corr[1])
-]
-
-# Matriz de correlación
 st.subheader("Matriz de Correlación entre Variables Numéricas")
 
+# Filtros en el menú lateral (sidebar)
+with st.sidebar:
+    st.markdown("## Filtros para Matriz de Correlación")
+    
+    paises_corr = df['País'].unique()
+    paises_corr_seleccionados = st.multiselect(
+        "Selecciona país(es) para correlación:",
+        options=paises_corr,
+        default=paises_corr
+    )
+    
+    rango_edad_corr = st.slider(
+        "Selecciona el rango de edad para correlación:",
+        min_value=int(df['Edad'].min()),
+        max_value=int(df['Edad'].max()),
+        value=(18, 60)
+    )
+
+# Aplicar filtros al DataFrame
+df_filtrado_corr = df[
+    (df['País'].isin(paises_corr_seleccionados)) &
+    (df['Edad'] >= rango_edad_corr[0]) &
+    (df['Edad'] <= rango_edad_corr[1])
+]
+
+# Asegurarnos de que solo columnas numéricas
 df_numerico = df_filtrado_corr[['Edad', 'Horas_Vistas']].dropna()
+
+# Calcular la matriz de correlación
 matriz_corr = df_numerico.corr()
 
-fig = px.imshow(
+# Graficar usando plotly (interactivo)
+fig_corr = px.imshow(
     matriz_corr,
     text_auto=True,
     color_continuous_scale='RdBu_r',
     zmin=-1,
     zmax=1,
-    title="Matriz de Correlación Interactiva"
+    title="Matriz de Correlación Interactiva (Edad vs Horas Vistas)"
 )
 
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig_corr, use_container_width=True)
 
 
 
