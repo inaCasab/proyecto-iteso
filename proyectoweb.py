@@ -127,21 +127,23 @@ st.plotly_chart(fig_suscripciones, use_container_width=True)
 #Análisis 3.1: horas vistas por tipo de suscripción
 
 # Análisis de horas vistas por tipo de suscripción
-horas_promedio_suscripcion = df.groupby('Tipo_Suscripción')['Horas_Vistas'].mean()
+
+horas_promedio_suscripcion = df.groupby('Tipo_Suscripción')['Horas_Vistas'].mean().reset_index()
 
 # Mostrar el análisis en Streamlit
 st.write("### Horas Promedio Vistas por Tipo de Suscripción")
 st.write(horas_promedio_suscripcion)
 
-# Graficar las horas promedio vistas por tipo de suscripción
-fig, ax = plt.subplots(figsize=(8,6))
-sns.barplot(x=horas_promedio_suscripcion.index, y=horas_promedio_suscripcion.values, palette='Blues', ax=ax)
-ax.set_title('Horas Promedio Vistas por Tipo de Suscripción')
-ax.set_xlabel('Tipo de Suscripción')
-ax.set_ylabel('Horas Promedio Vistas')
+# Crear la gráfica interactiva con Plotly
+fig = px.bar(horas_promedio_suscripcion, 
+             x='Tipo_Suscripción', 
+             y='Horas_Vistas', 
+             title='Horas Promedio Vistas por Tipo de Suscripción',
+             labels={'Horas_Vistas': 'Horas Promedio Vistas', 'Tipo_Suscripción': 'Tipo de Suscripción'},
+             text='Horas_Vistas')  # Mostrar el valor de las barras al pasar el mouse
 
 # Mostrar la gráfica en Streamlit
-st.pyplot(fig)
+st.plotly_chart(fig)
 
 
 # Análisis 4: Usuarios por país 
