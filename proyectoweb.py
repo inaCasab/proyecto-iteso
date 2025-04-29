@@ -81,6 +81,7 @@ fig1 = px.bar(
 st.plotly_chart(fig1, use_container_width=True)
 
 # Análisis 2: 
+
 #Correlación entre edad y horas vistas
 if 'Horas_Vistas' in df.columns:
     correlacion = df[['Edad', 'Horas_Vistas']].corr().iloc[0, 1]
@@ -121,6 +122,27 @@ fig_suscripciones = px.pie(
     title="Distribución de Tipos de Suscripción (Filtrada)"
 )
 st.plotly_chart(fig_suscripciones, use_container_width=True)
+
+
+#Análisis 3.1: horas vistas por tipo de suscripción
+
+# Análisis de horas vistas por tipo de suscripción
+horas_promedio_suscripcion = df.groupby('Tipo_Suscripción')['Horas_Vistas'].mean()
+
+# Mostrar el análisis en Streamlit
+st.write("### Horas Promedio Vistas por Tipo de Suscripción")
+st.write(horas_promedio_suscripcion)
+
+# Graficar las horas promedio vistas por tipo de suscripción
+fig, ax = plt.subplots(figsize=(8,6))
+sns.barplot(x=horas_promedio_suscripcion.index, y=horas_promedio_suscripcion.values, palette='Blues', ax=ax)
+ax.set_title('Horas Promedio Vistas por Tipo de Suscripción')
+ax.set_xlabel('Tipo de Suscripción')
+ax.set_ylabel('Horas Promedio Vistas')
+
+# Mostrar la gráfica en Streamlit
+st.pyplot(fig)
+
 
 # Análisis 4: Usuarios por país 
 st.subheader("Cantidad de Usuarios por País")
