@@ -82,19 +82,7 @@ st.plotly_chart(fig1, use_container_width=True)
 
 # Análisis 2: 
 
-#Correlación entre edad y horas vistas
-if 'Horas_Vistas' in df.columns:
-    correlacion = df[['Edad', 'Horas_Vistas']].corr().iloc[0, 1]
-    st.write(f"La correlación entre edad y horas vistas es: {correlacion:.2f}")
-    fig2 = px.scatter(df, x='Edad', y='Horas_Vistas', color='País',
-                      title="Relación entre Edad y Horas Vistas")
-    st.plotly_chart(fig2)
-
-
-
-#Correción 2: 
-# Filtros interactivos
-paises_unicos = df['País'].unique()  # Asegúrate de tener esta línea arriba si no la has puesto
+paises_unicos = df['País'].unique()
 paises_seleccionados = st.multiselect("Selecciona país(es)", options=paises_unicos, default=paises_unicos)
 rango_edad = st.slider(
     "Selecciona el rango de edad",
@@ -109,20 +97,21 @@ df_filtrado = df[
     (df['Edad'] >= rango_edad[0]) & (df['Edad'] <= rango_edad[1])
 ]
 
-# Relación entre Edad y Horas Vistas
-st.subheader("Relación entre Edad y Horas Vistas")
+# Matriz de correlación
+st.subheader("Matriz de Correlación entre Variables Numéricas")
 
-fig_dispersion = px.scatter(
-    df_filtrado,
-    x="Edad",
-    y="Horas_Vistas",
-    color="País",
-    trendline="ols",  # Línea de regresión
-    title="Edad vs. Horas de Visualización",
-    labels={"Edad": "Edad (años)", "Horas_Vistas": "Horas de Visualización"}
-)
+# Seleccionar solo las columnas numéricas
+df_numerico = df_filtrado[['Edad', 'Horas_Vistas']].dropna()
 
-st.plotly_chart(fig_dispersion, use_container_width=True)
+# Calcular la matriz de correlación
+matriz_corr = df_numerico.corr()
+
+# Mostrar como gráfico tipo heatmap
+fig, ax = plt.subplots(figsize=(8, 6))
+sns.heatmap(matriz_corr, annot=True, cmap='coolwarm', vmin=-1, vmax=1, linewidths=0.5, ax=ax)
+ax.set_title('Matriz de Correlación')
+st.pyplot(fig)
+
 
 # Análisis 3: Usuarios por tipo de suscripción
 
