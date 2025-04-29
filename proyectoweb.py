@@ -303,13 +303,13 @@ df_filtrado = df[
     (df['Edad'] >= rango_edad[0]) & (df['Edad'] <= rango_edad[1])
 ]
 
-# Relación entre Edad y Horas Vistas en gráfico de líneas
+# Relación entre Edad y Horas Vistas 
 st.subheader("Relación entre Edad y Horas Vistas")
 
 # Ordenar por edad para que la línea tenga sentido
 df_filtrado = df_filtrado.sort_values("Edad")
 
-fig_linea = px.line(
+fig_linea = px.plot(
     df_filtrado,
     x="Edad",
     y="Horas_Vistas",
