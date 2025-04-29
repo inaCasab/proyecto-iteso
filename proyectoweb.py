@@ -37,10 +37,10 @@ st.markdown("### Creado por Ina Gabriela Casab Covarrubias y Leonardo Gamboa Cru
 if 'mostrar_datos' not in st.session_state:
     st.session_state.mostrar_datos = False
 
-# Cambiar el texto del botón según el estado
+# Cambiar el texto del botón 
 boton_texto = "Ocultar datos" if st.session_state.mostrar_datos else "Mostrar todos los datos"
 
-# Botón para alternar el estado
+#Alternar el estado
 if st.button(boton_texto):
     st.session_state.mostrar_datos = not st.session_state.mostrar_datos
 
@@ -90,6 +90,40 @@ if 'Horas_Vistas' in df.columns:
                       title="Relación entre Edad y Horas Vistas")
     st.plotly_chart(fig2)
 
+
+
+#Correción 2: 
+# Filtros interactivos
+paises_unicos = df['País'].unique()  # Asegúrate de tener esta línea arriba si no la has puesto
+paises_seleccionados = st.multiselect("Selecciona país(es)", options=paises_unicos, default=paises_unicos)
+rango_edad = st.slider(
+    "Selecciona el rango de edad",
+    min_value=int(df['Edad'].min()),
+    max_value=int(df['Edad'].max()),
+    value=(18, 60)
+)
+
+# Aplicar filtros al DataFrame
+df_filtrado = df[
+    (df['País'].isin(paises_seleccionados)) &
+    (df['Edad'] >= rango_edad[0]) & (df['Edad'] <= rango_edad[1])
+]
+
+# Relación entre Edad y Horas Vistas
+st.subheader("Relación entre Edad y Horas Vistas")
+
+fig_dispersion = px.scatter(
+    df_filtrado,
+    x="Edad",
+    y="Horas_Vistas",
+    color="País",
+    trendline="ols",  # Línea de regresión
+    title="Edad vs. Horas de Visualización",
+    labels={"Edad": "Edad (años)", "Horas_Vistas": "Horas de Visualización"}
+)
+
+st.plotly_chart(fig_dispersion, use_container_width=True)
+
 # Análisis 3: Usuarios por tipo de suscripción
 
 st.subheader("Distribución por Tipo de Suscripción")
@@ -119,14 +153,12 @@ suscripciones = df_filtrado['Tipo_Suscripción'].value_counts()
 fig_suscripciones = px.pie(
     names=suscripciones.index,
     values=suscripciones.values,
-    title="Distribución de Tipos de Suscripción (Filtrada)"
+    title="Distribución de Tipos de Suscripción"
 )
 st.plotly_chart(fig_suscripciones, use_container_width=True)
 
 
 #Análisis 3.1: horas vistas por tipo de suscripción
-
-# Análisis de horas vistas por tipo de suscripción
 
 horas_promedio_suscripcion = df.groupby('Tipo_Suscripción')['Horas_Vistas'].mean().reset_index()
 
@@ -193,20 +225,7 @@ fig_top_edades = px.bar(
 
 st.plotly_chart(fig_top_edades, use_container_width=True)
 
-#Relación entre edad y horas vistas
 
-st.subheader("Relación entre Edad y Horas Vistas")
-
-fig_dispersion = px.scatter(
-    df,
-    x="Edad",
-    y="Horas_Vistas",
-    trendline="ols",
-    color="País",
-    title="Edad vs. Horas de Visualización"
-)
-
-st.plotly_chart(fig_dispersion, use_container_width=True)
 
 #Género favorito
 
