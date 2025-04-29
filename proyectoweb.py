@@ -316,5 +316,45 @@ fig_dispersion = px.scatter(
 
 st.plotly_chart(fig_dispersion, use_container_width=True)
 
+#_________________________-
+
+# Filtros interactivos con claves únicas
+paises_seleccionados = st.multiselect(
+    "Selecciona país(es)",
+    options=paises_unicos,
+    default=paises_unicos,
+    key="filtro_paises"
+)
+
+rango_edad = st.slider(
+    "Selecciona el rango de edad",
+    min_value=int(df['Edad'].min()),
+    max_value=int(df['Edad'].max()),
+    value=(18, 60),
+    key="filtro_rango_edad"
+)
+
+# Filtrar el DataFrame
+df_filtrado = df[
+    (df['País'].isin(paises_seleccionados)) &
+    (df['Edad'] >= rango_edad[0]) & (df['Edad'] <= rango_edad[1])
+]
+
+# Relación entre Edad y Horas Vistas en gráfico de líneas
+st.subheader("Relación entre Edad y Horas Vistas")
+
+# Ordenar por edad para que la línea tenga sentido
+df_filtrado = df_filtrado.sort_values("Edad")
+
+fig_linea = px.line(
+    df_filtrado,
+    x="Edad",
+    y="Horas_Vistas",
+    color="País",
+    title="Edad vs. Horas de Visualización (Línea)"
+)
+
+st.plotly_chart(fig_linea, use_container_width=True)
+
 
 
