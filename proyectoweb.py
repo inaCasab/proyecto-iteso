@@ -276,56 +276,6 @@ fig_genero = px.bar(
 st.plotly_chart(fig_genero, use_container_width=True)
 
 #------------------------------------------
-# Menú lateral de navegación
-st.sidebar.title("Menú de navegación")
-opcion = st.sidebar.radio(
-    "Ir a:",
-    (
-        "Vista General de Datos",
-        "Edad Promedio por País",
-        "Relación Edad vs Horas Vistas",
-        "Distribución de Tipos de Suscripción",
-        "Horas Vistas por Tipo de Suscripción",
-        "Usuarios por País",
-        "Top Edades con Más Usuarios",
-        "Género Favorito por País"
-    )
-)
-
-# Según la opción elegida, se muestra cada sección
-if opcion == "Vista General de Datos":
-    # Aquí tu código para mostrar el dataframe
-    st.subheader("Vista General de los Datos")
-    # (tu código para mostrar datos)
-
-elif opcion == "Edad Promedio por País":
-    # Aquí tu análisis de edad promedio
-    st.subheader("Edad Promedio por País")
-    # (tu código de la gráfica de edad promedio)
-
-elif opcion == "Relación Edad vs Horas Vistas":
-    st.subheader("Relación entre Edad y Horas Vistas")
-    # (tu matriz de correlación)
-
-elif opcion == "Distribución de Tipos de Suscripción":
-    st.subheader("Distribución por Tipo de Suscripción")
-    # (tu pastel de suscripciones)
-
-elif opcion == "Horas Vistas por Tipo de Suscripción":
-    st.subheader("Horas Promedio Vistas por Tipo de Suscripción")
-    # (tu barra de horas vistas)
-
-elif opcion == "Usuarios por País":
-    st.subheader("Cantidad de Usuarios por País")
-    # (tu gráfica de usuarios por país)
-
-elif opcion == "Top Edades con Más Usuarios":
-    st.subheader("Top Edades con Más Usuarios")
-    # (tu gráfica de edades)
-
-elif opcion == "Género Favorito por País":
-    st.subheader("Análisis del Género Favorito de los Usuarios")
-    # (tu gráfico de géneros)
 
 
 
