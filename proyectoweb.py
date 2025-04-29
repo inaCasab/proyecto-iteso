@@ -22,7 +22,7 @@ df = df.rename(columns={
 st.set_page_config(page_title="Netflix Users Data", page_icon="📊", layout="wide")
 
 # Imagen inicial
-st.image('Netflix.jpg', caption='Netflix Users Data', use_container_width=True)
+st.image('Netflix.png', caption='Netflix Users Data', use_container_width=True)
 
 # Título y descripción
 st.title('Análisis de Datos de Usuarios de Netflix')
