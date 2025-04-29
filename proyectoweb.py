@@ -88,7 +88,7 @@ st.plotly_chart(fig1, use_container_width=True)
 
 st.subheader("Relación entre Edad y Horas Vistas")
 
-# Filtros interactivos (en el centro, no en el sidebar)
+# Filtros interactivos 
 paises_unicos = df['País'].unique()
 
 paises_seleccionados = st.multiselect(
@@ -114,10 +114,10 @@ df_filtrado = df[
 # Seleccionar columnas numéricas
 df_numerico = df_filtrado[['Edad', 'Horas_Vistas']].dropna()
 
-# Calcular la matriz de correlación
+# matriz de correlación
 matriz_corr = df_numerico.corr()
 
-# Graficar la matriz de correlación de manera interactiva
+# Graficar 
 fig_corr = px.imshow(
     matriz_corr,
     text_auto=True,
@@ -171,7 +171,7 @@ st.plotly_chart(fig_suscripciones, use_container_width=True)
 
 horas_promedio_suscripcion = df.groupby('Tipo_Suscripción')['Horas_Vistas'].mean().reset_index()
 
-# Mostrar el análisis en Streamlit
+# Mostrar el análisis
 st.write("### Horas Promedio Vistas por Tipo de Suscripción")
 st.write(horas_promedio_suscripcion)
 
@@ -187,10 +187,12 @@ fig = px.bar(horas_promedio_suscripcion,
 st.plotly_chart(fig)
 
 
+
+
 # Análisis 4: Usuarios por país 
 st.subheader("Cantidad de Usuarios por País")
 
-# Filtro para seleccionar cuántos países mostrar
+# Filtro para países 
 num_paises = st.slider(
     "Selecciona cuántos países quieres mostrar",
     min_value=1,
@@ -198,10 +200,10 @@ num_paises = st.slider(
     value=10
 )
 
-# Contar usuarios por país, ordenar y limitar a los seleccionados
+# Contar y ordenar usuarios por país
 usuarios_por_pais = df['País'].value_counts().sort_values(ascending=False).head(num_paises)
 
-# Gráfico interactivo con Plotly
+# Gráficar
 fig4 = px.bar(
     usuarios_por_pais,
     x=usuarios_por_pais.index,
@@ -216,7 +218,7 @@ st.plotly_chart(fig4, use_container_width=True)
 
 
 
-#Edades con más usuarios (Top N edades)
+#Edades con más usuarios 
 
 st.subheader("Top Edades con Más Usuarios")
 
@@ -256,7 +258,7 @@ rango_edad_genero = st.slider(
     value=(18, 60)
 )
 
-# Filtrar el DataFrame
+# Filtrar los datos
 df_genero = df[
     (df['País'].isin(paises_genero_seleccionados)) &
     (df['Edad'] >= rango_edad_genero[0]) &
