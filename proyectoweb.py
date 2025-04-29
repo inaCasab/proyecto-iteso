@@ -30,11 +30,19 @@ st.subheader('Explora los insights de los usuarios de Netflix')
 
 # Mostrar los datos
 
-if st.checkbox("Mostrar todos los datos"):
+if 'mostrar_datos' not in st.session_state:
+    st.session_state.mostrar_datos = False
+
+# Botón para mostrar los datos
+if st.button("Mostrar todos los datos"):
+    st.session_state.mostrar_datos = True
+
+# Mostrar los datos si el estado es True
+if st.session_state.mostrar_datos:
     st.subheader("Vista completa de los datos")
     st.dataframe(df)
 else:
-    st.info("Haz clic en la casilla para mostrar los datos completos.")
+    st.info("Haz clic en el botón para mostrar los datos completos.")
 
 
 
@@ -65,7 +73,8 @@ fig1 = px.bar(
 )
 st.plotly_chart(fig1, use_container_width=True)
 
-# Análisis 2: Correlación entre edad y horas vistas
+# Análisis 2: 
+#Correlación entre edad y horas vistas
 if 'Horas_Vistas' in df.columns:
     correlacion = df[['Edad', 'Horas_Vistas']].corr().iloc[0, 1]
     st.write(f"La correlación entre edad y horas vistas es: {correlacion:.2f}")
@@ -106,7 +115,7 @@ fig_suscripciones = px.pie(
 )
 st.plotly_chart(fig_suscripciones, use_container_width=True)
 
-# Análisis 4: Usuarios por país (Top 5)
+# Análisis 4: Usuarios por país 
 st.subheader("Cantidad de Usuarios por País")
 
 # Filtro para seleccionar cuántos países mostrar
