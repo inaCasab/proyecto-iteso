@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 import plotly.express as px
+import plotly.graph_objects as go
 
 # Cargar el archivo CSV
 df = pd.read_csv("netflix_users.csv")
@@ -276,45 +277,80 @@ st.plotly_chart(fig_genero, use_container_width=True)
 
 #------------------------------------------
 
-#_________________________-
 
-# Filtros interactivos con claves únicas
-paises_seleccionados = st.multiselect(
-    "Selecciona país(es)",
-    options=paises_unicos,
-    default=paises_unicos,
-    key="filtro_paises"
-)
+# Análisis: Matriz de correlación género favorito y país
 
-rango_edad = st.slider(
-    "Selecciona el rango de edad",
+st.subheader("Correlación entre el Género Favorito y elrango_edad_calor = st.slider(
+    "Selecciona el rango de edad:",
     min_value=int(df['Edad'].min()),
     max_value=int(df['Edad'].max()),
-    value=(18, 60),
-    key="filtro_rango_edad"
+    value=(int(df['Edad'].min()), int(df['Edad'].max())),
+    key="matriz_calor_edad"
+)
+
+# Filtrar el DataFrame según los filtros seleccionados
+df_calor = df[
+    (df['País'].isin(paises_seleccionados_calor)) &
+    (df['Edad'] >= rango_edad_calor[0]) &
+    (df['Edad'] <= rango_edad_calor[1])
+]
+
+# Crear la tabla cruzada
+genero_por_pais = df_calor.groupby(['País', 'Género_Favorito']).size().unstack(fill_value=0)
+
+# Crear el heatmap con Plotly
+fig_heatmap = go.Figure(data=go.Heatmap(
+    z=genero_por_pais.values,
+    x=genero_por_pais.columns,
+    y=genero_por_pais.index,
+    colorscale='YlGnBu',
+    hoverongaps=False,
+    showscale=True
+))
+
+fig_heatmap.update_layout(
+    title="Preferencia de Géneros por País y Edad",
+    xaxis_title="Género Favorito",
+    yaxis_title="País"
+)
+
+# Mostrar en Streamlit
+st.plotly_chart(fig_heatmap, use_container_width=True) País")
+
+# Filtros interactivos
+paises_calor = df['País'].unique()
+paises_seleccionados_calor = st.multiselect(
+    "Selecciona los países para visualizar:",
+    options=sorted(paises_calor),
+    default=list(paises_calor),
+    key="matriz_calor_paises"
+)
+
+
+# Análisis: Matriz de correlación género favorito y edad
+st.subheader("Matriz de Calor: Género Favorito por Edad")
+
+# Filtros interactivos
+paises_matriz_edad = df['País'].unique()
+paises_seleccionados_matriz_edad = st.multiselect(
+    "Selecciona los países para visualizar:",
+    options=sorted(paises_matriz_edad),
+    default=list(paises_matriz_edad),
+    key="matriz_calor_por_edad_paises"
+)
+
+rango_edad_matriz = st.slider(
+    "Selecciona el rango de edad:",
+    min_value=int(df['Edad'].min()),
+    max_value=int(df['Edad'].max()),
+    value=(int(df['Edad'].min()), int(df['Edad'].max())),
+    key="matriz_calor_por_edad_rango"
 )
 
 # Filtrar el DataFrame
-df_filtrado = df[
-    (df['País'].isin(paises_seleccionados)) &
-    (df['Edad'] >= rango_edad[0]) & (df['Edad'] <= rango_edad[1])
-]
+df_matriz_edad = df[
+    (df['País
 
-# Relación entre Edad y Horas Vistas 
-st.subheader("Relación entre Edad y Horas Vistas")
-
-# Ordenar por edad para que la línea tenga sentido
-df_filtrado = df_filtrado.sort_values("Edad")
-
-fig_linea = px.plot(
-    df_filtrado,
-    x="Edad",
-    y="Horas_Vistas",
-    color="País",
-    title="Edad vs. Horas de Visualización (Línea)"
-)
-
-st.plotly_chart(fig_linea, use_container_width=True)
 
 
 
