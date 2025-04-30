@@ -339,14 +339,14 @@ paises_seleccionados_matriz_edad = st.multiselect(
     key="matriz_calor_por_edad_paises"
 )
 
-rango_edad_matriz = st.slider(
+
+rango_edad_calor = st.slider(
     "Selecciona el rango de edad:",
     min_value=int(df['Edad'].min()),
     max_value=int(df['Edad'].max()),
     value=(int(df['Edad'].min()), int(df['Edad'].max())),
     key="matriz_calor_por_edad_rango"
 )
-
 # Filtrar el DataFrame
 df_matriz_edad = df[
     (df['País
