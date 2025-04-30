@@ -334,7 +334,8 @@ st.plotly_chart(fig_heatmap, use_container_width=True)
 
 
 # Análisis: Matriz de correlación género favorito y edad
-st.subheader("Matriz de Calor: Género Favorito por Edad")
+
+st.subheader("Correlación entre el Género Favorito y la Edad")
 
 # Filtros interactivos
 paises_matriz_edad = df['País'].unique()
@@ -345,17 +346,42 @@ paises_seleccionados_matriz_edad = st.multiselect(
     key="matriz_calor_por_edad_paises"
 )
 
-
-rango_edad_calor = st.slider(
+rango_edad_matriz = st.slider(
     "Selecciona el rango de edad:",
     min_value=int(df['Edad'].min()),
     max_value=int(df['Edad'].max()),
     value=(int(df['Edad'].min()), int(df['Edad'].max())),
     key="matriz_calor_por_edad_rango"
 )
+
 # Filtrar el DataFrame
 df_matriz_edad = df[
-    (df['País
+    (df['País'].isin(paises_seleccionados_matriz_edad)) &
+    (df['Edad'] >= rango_edad_matriz[0]) &
+    (df['Edad'] <= rango_edad_matriz[1])
+]
+
+# Agrupar: Edad vs. Género Favorito
+genero_por_edad = df_matriz_edad.groupby(['Edad', 'Género_Favorito']).size().unstack(fill_value=0)
+
+# Crear heatmap con Plotly
+fig_heatmap_edad = go.Figure(data=go.Heatmap(
+    z=genero_por_edad.values,
+    x=genero_por_edad.columns,
+    y=genero_por_edad.index,
+    colorscale='YlOrRd',
+    hoverongaps=False,
+    showscale=True
+))
+
+fig_heatmap_edad.update_layout(
+    title="Preferencia de Géneros por Edad",
+    xaxis_title="Género Favorito",
+    yaxis_title="Edad"
+)
+
+# Mostrar en Streamlit
+st.plotly_chart(fig_heatmap_edad, use_container_width=True)
 
 
 
