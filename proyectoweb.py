@@ -280,13 +280,14 @@ st.plotly_chart(fig_genero, use_container_width=True)
 
 # Análisis: Matriz de correlación género favorito y país
 
-st.subheader("Correlación entre el Género Favorito y elrango_edad_calor = st.slider(
+st.subheader("Correlación entre el Género Favorito y Edad")
+
+rango_edad_calor = st.slider(
     "Selecciona el rango de edad:",
     min_value=int(df['Edad'].min()),
     max_value=int(df['Edad'].max()),
     value=(int(df['Edad'].min()), int(df['Edad'].max())),
-    key="matriz_calor_edad"
-)
+    key="matriz_calor_por_edad_rango"
 
 # Filtrar el DataFrame según los filtros seleccionados
 df_calor = df[
