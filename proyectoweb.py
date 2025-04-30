@@ -127,7 +127,6 @@ st.plotly_chart(fig_linea, use_container_width=True)
 
 
 
-
 # Análisis 3: Usuarios por tipo de suscripción
 
 st.subheader("Distribución por Tipo de Suscripción")
