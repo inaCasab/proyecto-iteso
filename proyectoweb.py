@@ -86,48 +86,43 @@ st.plotly_chart(fig1, use_container_width=True)
 
 # Análisis 2: 
 
-st.subheader("Relación entre Edad y Horas Vistas")
-
-# Filtros interactivos 
-paises_unicos = df['País'].unique()
-
+# Filtros interactivos
 paises_seleccionados = st.multiselect(
-    "Selecciona país(es)", 
-    options=paises_unicos, 
-    default=paises_unicos
+    "Selecciona país(es)",
+    options=paises_unicos,
+    default=paises_unicos,
+    key="filtro_paises"
 )
 
 rango_edad = st.slider(
     "Selecciona el rango de edad",
     min_value=int(df['Edad'].min()),
     max_value=int(df['Edad'].max()),
-    value=(18, 60)
+    value=(18, 60),
+    key="filtro_rango_edad"
 )
 
-# Aplicar los filtros
+# Filtrar el DataFrame
 df_filtrado = df[
     (df['País'].isin(paises_seleccionados)) &
-    (df['Edad'] >= rango_edad[0]) & 
-    (df['Edad'] <= rango_edad[1])
+    (df['Edad'] >= rango_edad[0]) & (df['Edad'] <= rango_edad[1])
 ]
 
-# Seleccionar columnas numéricas
-df_numerico = df_filtrado[['Edad', 'Horas_Vistas']].dropna()
+# Agrupar por país y edad promedio, sacando promedio de horas vistas
+df_agrupado = df_filtrado.groupby(['País', 'Edad'], as_index=False)['Horas_Vistas'].mean()
 
-# matriz de correlación
-matriz_corr = df_numerico.corr()
+# Gráfico de líneas
+st.subheader("Relación entre Edad y Horas Vistas (promedio por edad)")
 
-# Graficar 
-fig_corr = px.imshow(
-    matriz_corr,
-    text_auto=True,
-    color_continuous_scale='RdBu_r',
-    zmin=-1,
-    zmax=1,
-    title="Matriz de Correlación entre Edad y Horas Vistas"
+fig_linea = px.line(
+    df_agrupado,
+    x="Edad",
+    y="Horas_Vistas",
+    color="País",
+    title="Edad vs. Horas de Visualización (Promedios)"
 )
 
-st.plotly_chart(fig_corr, use_container_width=True)
+st.plotly_chart(fig_linea, use_container_width=True)
 
 
 
