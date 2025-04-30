@@ -86,7 +86,10 @@ st.plotly_chart(fig1, use_container_width=True)
 
 # Análisis 2: 
 
-# Filtros interactivos
+# Obtener lista única de países
+paises_unicos = df['País'].unique()
+
+# Filtro 
 paises_seleccionados = st.multiselect(
     "Selecciona país(es)",
     options=paises_unicos,
