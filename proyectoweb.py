@@ -280,14 +280,24 @@ st.plotly_chart(fig_genero, use_container_width=True)
 
 # Análisis: Matriz de correlación género favorito y país
 
-st.subheader("Correlación entre el Género Favorito y Edad")
+st.subheader("Correlación entre el Género Favorito y el País")
+
+# Filtros interactivos
+paises_calor = df['País'].unique()
+paises_seleccionados_calor = st.multiselect(
+    "Selecciona los países para visualizar:",
+    options=sorted(paises_calor),
+    default=list(paises_calor),
+    key="matriz_calor_paises"
+)
 
 rango_edad_calor = st.slider(
     "Selecciona el rango de edad:",
     min_value=int(df['Edad'].min()),
     max_value=int(df['Edad'].max()),
     value=(int(df['Edad'].min()), int(df['Edad'].max())),
-    key="matriz_calor_por_edad_rango"
+    key="matriz_calor_edad"
+)
 
 # Filtrar el DataFrame según los filtros seleccionados
 df_calor = df[
@@ -296,10 +306,10 @@ df_calor = df[
     (df['Edad'] <= rango_edad_calor[1])
 ]
 
-# Crear la tabla cruzada
+# Crear la tabla 
 genero_por_pais = df_calor.groupby(['País', 'Género_Favorito']).size().unstack(fill_value=0)
 
-# Crear el heatmap con Plotly
+# Crear la gráfica
 fig_heatmap = go.Figure(data=go.Heatmap(
     z=genero_por_pais.values,
     x=genero_por_pais.columns,
@@ -315,17 +325,12 @@ fig_heatmap.update_layout(
     yaxis_title="País"
 )
 
-# Mostrar en Streamlit
-st.plotly_chart(fig_heatmap, use_container_width=True) País")
+# Mostrar
+st.plotly_chart(fig_heatmap, use_container_width=True)
 
-# Filtros interactivos
-paises_calor = df['País'].unique()
-paises_seleccionados_calor = st.multiselect(
-    "Selecciona los países para visualizar:",
-    options=sorted(paises_calor),
-    default=list(paises_calor),
-    key="matriz_calor_paises"
-)
+
+#__________________________-
+
 
 
 # Análisis: Matriz de correlación género favorito y edad
